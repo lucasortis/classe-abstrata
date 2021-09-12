@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Collections.Generic;
 using HerancaEPolimorfismo.Entities;
 
 namespace HerancaEPolimorfismo
@@ -8,48 +10,30 @@ namespace HerancaEPolimorfismo
         static void Main(string[] args)
         {
 
-            //Herança
-            BusinessAccount acc1 = new BusinessAccount(200, 3401, "Lucas Ortis", 2000);
+            List<Account> accounts = new List<Account>();
 
-            Console.WriteLine(acc1.Balance);
+            accounts.Add(new BusinessAccount(1001, "Alex", 2000.0, 25000));
+            accounts.Add(new SavingsAccount(1002, "Lucas", 2000.0, 0.01));
+            accounts.Add(new BusinessAccount(1003, "Bianca", 2000.0, 25000));
+            accounts.Add(new SavingsAccount(1004, "Allan", 2000.0, 0.01));
 
-            //Upcasting
+            double sum = 0;
 
-            SavingsAccount acc2 = new SavingsAccount(10, "Alex", 2000, 0.05);
-            acc2.UpdateBalance();
-            Console.WriteLine(acc2.Balance);
-            Account acc3 = acc2;
-            Console.WriteLine(acc3.Balance);
-            Account acc4 = new BusinessAccount(3, 2122, "Ana", 3000);
-
-            //Downcasting
-
-            BusinessAccount acc5 = (BusinessAccount)acc4;
-            acc5.Loan(100.0);
-
-            //BusinessAccount acc6 = (BusinessAccount)acc3;
-            if(acc3 is BusinessAccount)
+            foreach(Account acc in accounts)
             {
-                BusinessAccount acc6 = acc3 as BusinessAccount;
-                acc6.Loan(200.0);
-                Console.WriteLine("Loan!");
+                sum += acc.Balance;
             }
 
-            if(acc3 is SavingsAccount)
+            Console.WriteLine("Total balance: $ " + sum.ToString("F2", CultureInfo.InvariantCulture));
+
+            foreach(Account acc in accounts)
             {
-                SavingsAccount acc6 = acc3 as SavingsAccount;
-                acc6.UpdateBalance();
-                Console.WriteLine("Update");
+                acc.Withdraw(10.00);
+                Console.WriteLine(acc.Number + " Balance: $ " + acc.Balance.ToString("F2", CultureInfo.InvariantCulture));
             }
 
-            //sobrescrita
-            Account accTesteSobrescrita = new Account(1001, "João", 500.0);
-            Account accTesteSobrescrita2 = new SavingsAccount(1002, "Anna", 500.0, 0.01);
+            
 
-            accTesteSobrescrita.Withdraw(10);
-            accTesteSobrescrita2.Withdraw(10);
-
-            Console.WriteLine("João's balance: " + accTesteSobrescrita.Balance);
-            Console.WriteLine("Ana's balance: " + accTesteSobrescrita2.Balance);        }
+        }
     }
 }
